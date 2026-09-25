@@ -25,13 +25,7 @@ class Store {
     }
 
     async _ensureTable(db) {
-        const exists = await db
-            .query()
-            .select()
-            .from("sqlite_master")
-            .where("type", "table")
-            .where("name", this.tableName)
-            .exists();
+        const exists = await db.query().select().from("sqlite_master").where("type", "table").where("name", this.tableName).exists();
         if (exists) {
             return;
         }
@@ -50,48 +44,25 @@ class Store {
     async clear() {
         if (this.ensureTable) await this._ensureTable(this.db);
 
-        return await this.db
-            .query()
-            .delete(this.tableName)
-            .where("api_id", this.apiId)
-            .where("session_id", this.sessionId);
+        return await this.db.query().delete(this.tableName).where("api_id", this.apiId).where("session_id", this.sessionId);
     }
 
     async delete(name) {
         if (this.ensureTable) await this._ensureTable(this.db);
 
-        return await this.db
-            .query()
-            .delete(this.tableName)
-            .where("api_id", this.apiId)
-            .where("session_id", this.sessionId)
-            .where("name", name);
+        return await this.db.query().delete(this.tableName).where("api_id", this.apiId).where("session_id", this.sessionId).where("name", name);
     }
 
     async get(name) {
         if (this.ensureTable) await this._ensureTable(this.db);
 
-        return await this.db
-            .query()
-            .select()
-            .from(this.tableName)
-            .where("api_id", this.apiId)
-            .where("session_id", this.sessionId)
-            .where("name", name)
-            .first("value");
+        return await this.db.query().select().from(this.tableName).where("api_id", this.apiId).where("session_id", this.sessionId).where("name", name).first("value");
     }
 
     async has(name) {
         if (this.ensureTable) await this._ensureTable(this.db);
 
-        return await this.db
-            .query()
-            .select()
-            .from(this.tableName)
-            .where("api_id", this.apiId)
-            .where("session_id", this.sessionId)
-            .where("name", name)
-            .exists();
+        return await this.db.query().select().from(this.tableName).where("api_id", this.apiId).where("session_id", this.sessionId).where("name", name).exists();
     }
 
     async set(name, value) {
@@ -112,12 +83,7 @@ class Store {
     async getAll() {
         if (this.ensureTable) await this._ensureTable(this.db);
 
-        const rows = await this.db
-            .query()
-            .select()
-            .from(this.tableName)
-            .where("api_id", this.apiId)
-            .where("session_id", this.sessionId);
+        const rows = await this.db.query().select().from(this.tableName).where("api_id", this.apiId).where("session_id", this.sessionId);
 
         return Object.fromEntries(rows.map(({ name, value }) => [name, value]));
     }

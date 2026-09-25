@@ -3,6 +3,7 @@
 Key-value store sederhana di atas [@ndiinginc/dal](https://www.npmjs.com/package/@ndiinginc/dal), dengan scoping otomatis berdasarkan `apiId` dan `sessionId`. Cocok untuk menyimpan session data, state, atau cache kecil per API/session di dalam tabel SQL.
 
 Fitur:
+
 - Auto-create table saat pertama kali dipakai (`ensureTable`)
 - Data terisolasi per `apiId` + `sessionId`
 - Operasi dasar: `get`, `set`, `has`, `delete`, `clear`, `getAll`
@@ -22,8 +23,8 @@ const db = require("@ndiinginc/dal")(/* konfigurasi db */);
 
 const store = new Store(db, {
     tableName: "stores", // opsional, default "stores"
-    apiId: "my-api",     // opsional, default "default"
-    sessionId: "user-123" // opsional, default "default"
+    apiId: "my-api", // opsional, default "default"
+    sessionId: "user-123", // opsional, default "default"
 });
 
 await store.set("token", "abc123");
@@ -40,12 +41,12 @@ console.log(await store.has("token")); // false
 
 Membuat instance store baru.
 
-| Parameter | Tipe | Default | Keterangan |
-|---|---|---|---|
-| `db` | `import("@ndiinginc/dal")` | — | Instance DAL yang sudah terkoneksi ke database |
-| `options.tableName` | `String` | `"stores"` | Nama tabel yang dipakai/dibuat |
-| `options.apiId` | `String` | `"default"` | Namespace berdasarkan API |
-| `options.sessionId` | `String` | `"default"` | Namespace berdasarkan session |
+| Parameter           | Tipe                       | Default     | Keterangan                                     |
+| ------------------- | -------------------------- | ----------- | ---------------------------------------------- |
+| `db`                | `import("@ndiinginc/dal")` | —           | Instance DAL yang sudah terkoneksi ke database |
+| `options.tableName` | `String`                   | `"stores"`  | Nama tabel yang dipakai/dibuat                 |
+| `options.apiId`     | `String`                   | `"default"` | Namespace berdasarkan API                      |
+| `options.sessionId` | `String`                   | `"default"` | Namespace berdasarkan session                  |
 
 ### `store.set(name, value)`
 
@@ -100,12 +101,12 @@ const all = await store.getAll();
 
 Tabel dibuat otomatis (jika belum ada) dengan skema berikut:
 
-| Kolom | Tipe | Keterangan |
-|---|---|---|
-| `api_id` | `text`, `NOT NULL` | Bagian dari primary key |
-| `session_id` | `text`, `NOT NULL` | Bagian dari primary key |
-| `name` | `text`, `NOT NULL` | Bagian dari primary key (nama key) |
-| `value` | `text` | Nilai yang disimpan |
+| Kolom        | Tipe               | Keterangan                         |
+| ------------ | ------------------ | ---------------------------------- |
+| `api_id`     | `text`, `NOT NULL` | Bagian dari primary key            |
+| `session_id` | `text`, `NOT NULL` | Bagian dari primary key            |
+| `name`       | `text`, `NOT NULL` | Bagian dari primary key (nama key) |
+| `value`      | `text`             | Nilai yang disimpan                |
 
 Primary key: `(api_id, session_id, name)`
 Index tambahan: `(api_id, session_id)`
