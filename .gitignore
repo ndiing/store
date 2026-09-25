@@ -137,6 +137,5 @@ dist
 
 dev
 scripts
-dev2
-scripts2
+
 test.db
